@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>برنامه‌ساز</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef2f3;--card:#fff;--soft:#f3f6f7;--ink:#102226;--mut:#56696f;--line:#d3dde0;--acc:#0e5a60;--accink:#fff;--acc2:#f2b441;--code:#0f1c20;--codeink:#d7eef0;--gut:#6f8b91;--err:#b3261e;--ok:#1d7a46;color-scheme:light}
+:root[data-theme=dark]{--bg:#0b1315;--card:#121f23;--soft:#182a2f;--ink:#e4f0f2;--mut:#8fa7ad;--line:#26393e;--acc:#1b7f88;--accink:#fff;--code:#080f11;--codeink:#cfe7ea;--gut:#587177;--err:#ff8a80;--ok:#6fd49a;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Vazirmatn,Tahoma,sans-serif;line-height:1.8}
+header{background:var(--acc);color:var(--accink);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:40px;height:40px;border-radius:10px;background:var(--acc2);color:#12262b;display:grid;place-items:center;font:800 15px/1 Consolas,monospace;direction:ltr}
+header h1{margin:0;font-size:20px;font-weight:800;line-height:1.4}
+header p{margin:0;font-size:13px;opacity:.85;line-height:1.5}
+.hbtns{display:flex;gap:8px}
+main{max-width:1400px;margin:0 auto;padding:16px;display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:960px){main{grid-template-columns:400px minmax(0,1fr);align-items:start}}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+label{display:block;font-size:13px;color:var(--mut);margin:12px 0 4px}
+input,select,textarea{width:100%;font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+textarea{min-height:150px;resize:vertical}
+input[type=password],input[type=text].ltr{direction:ltr;text-align:left}
+button{font:inherit;cursor:pointer;border:0;border-radius:8px;padding:8px 14px;background:var(--acc);color:var(--accink);font-weight:600}
+button.alt{background:var(--soft);color:var(--ink);border:1px solid var(--line)}
+button.ghost{background:rgba(255,255,255,.16);color:#fff;padding:6px 12px}
+button.sm{padding:4px 10px;font-size:13px}
+button:disabled{opacity:.5;cursor:wait}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--acc2);outline-offset:1px}
+details{border:1px solid var(--line);border-radius:8px;padding:8px 12px;background:var(--soft)}
+summary{cursor:pointer;font-weight:600;font-size:14px}
+.inline{display:flex;gap:6px}
+.inline input{flex:1}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.row .main{flex:1;padding:12px;font-size:16px;background:var(--ink);color:var(--bg)}
+#chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+#chips button{background:var(--soft);color:var(--ink);border:1px solid var(--line);font-weight:400;font-size:13px;padding:2px 10px;border-radius:99px}
+#chips button:hover{border-color:var(--acc)}
+#status{font-size:13px;color:var(--mut);min-height:22px;margin-top:8px}
+#status.err{color:var(--err)}
+#usage{font-size:12px;color:var(--mut)}
+h2{font-size:14px;margin:18px 0 6px}
+#versions{list-style:none;margin:0;padding:0;display:grid;gap:4px;max-height:240px;overflow:auto}
+#versions li{display:flex;gap:4px}
+#versions li button.v{flex:1;text-align:right;background:var(--soft);color:var(--ink);border:1px solid var(--line);font-weight:400;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#versions li.cur button.v{border-color:var(--acc);box-shadow:inset 3px 0 0 var(--acc)}
+#note{white-space:pre-wrap;font-size:15px;margin:0 0 12px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.tabs button{background:none;color:var(--mut);border-radius:8px 8px 0 0;border-bottom:3px solid transparent;font-weight:600}
+.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--acc)}
+.badge{display:inline-block;min-width:20px;padding:0 6px;border-radius:99px;background:var(--err);color:#fff;font-size:12px;margin-inline-start:4px}
+.bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.bar .grow{flex:1;font-size:13px;color:var(--mut)}
+.devs button.on{background:var(--acc);color:var(--accink)}
+#frameWrap{margin:0 auto;max-width:100%;transition:max-width .2s}
+iframe{width:100%;height:540px;border:1px solid var(--line);border-radius:8px;background:#fff;display:block}
+.codewrap{display:flex;background:var(--code);border-radius:8px;max-height:600px;overflow:auto;direction:ltr}
+.codewrap pre{margin:0;padding:14px 0;font:13px/1.6 Consolas,Menlo,monospace}
+#ln{color:var(--gut);text-align:right;padding:14px 10px;user-select:none;border-right:1px solid #ffffff1a;position:sticky;left:0;background:var(--code)}
+#src{color:var(--codeink);padding:14px;flex:1;min-width:0;tab-size:2}
+#errList{margin:0;padding:0;list-style:none;display:grid;gap:6px;direction:ltr}
+#errList li{background:var(--soft);border-inline-start:4px solid var(--err);padding:6px 10px;border-radius:6px;font:13px/1.6 Consolas,monospace;word-break:break-word}
+.empty{color:var(--mut);padding:30px 6px;text-align:center}
+.empty strong{display:block;color:var(--ink);font-size:18px;margin-bottom:6px}
+dialog{border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);width:min(520px,92vw);padding:18px;font-family:inherit}
+dialog::backdrop{background:#000a}
+#plist{list-style:none;margin:10px 0;padding:0;display:grid;gap:6px;max-height:50vh;overflow:auto}
+#plist li{display:flex;gap:6px;align-items:center;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+#plist .t{flex:1;min-width:0}
+#plist .t b{display:block;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#plist .t small{color:var(--mut)}
+.dots::after{content:"";display:inline-block;width:1em;animation:d 1s steps(4) infinite;overflow:hidden;vertical-align:bottom}
+@keyframes d{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
+@media(prefers-reduced-motion:reduce){.dots::after{animation:none;content:"..."}#frameWrap{transition:none}}
+.hc{color:#7f9aa0;font-style:italic}.hs{color:#f2b441}.ht{color:#6fd1d9}.hn{color:#e58fb0}.hk{color:#9fc7ff;font-weight:600}
+.dsame,.dadd,.ddel{display:block;min-height:1.6em;white-space:pre}.dadd{background:#1d7a4640}.ddel{background:#b3261e40;opacity:.85}
+#editor{display:block;width:100%;min-height:420px;max-height:600px;direction:ltr;text-align:left;font:13px/1.6 Consolas,Menlo,monospace;background:var(--code);color:var(--codeink);border:0;border-radius:8px;tab-size:2;white-space:pre;padding:14px}
+@media(min-width:960px){#workspace{position:sticky;top:12px}}
+iframe{height:max(480px,68vh)}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <span class="logo" aria-hidden="true">&lt;/&gt;</span>
+    <div><h1>برنامه‌ساز</h1><p>بنویس چه برنامه‌ای می‌خواهی؛ کد کامل آن ساخته می‌شود.</p></div>
+  </div>
+  <div class="hbtns">
+    <button class="ghost" id="btnProjects">پروژه‌ها</button>
+    <button class="ghost" id="btnTheme">تم تیره</button>
+  </div>
+</header>
+
+<main>
+  <section id="compose">
+    <details id="settings">
+      <summary>تنظیمات</summary>
+      <label for="key">کلید API (فقط در همین مرورگر ذخیره می‌شود)</label>
+      <div class="inline">
+        <input id="key" type="password" placeholder="sk-ant-..." autocomplete="off">
+        <button class="alt sm" id="showKey" type="button">نمایش</button>
+      </div>
+      <label for="model">مدل</label>
+      <select id="model">
+        <option value="claude-sonnet-5-5">Claude Sonnet 5.5 (سریع)</option>
+        <option value="claude-opus-5-5">Claude Opus 5.5 (قوی‌تر)</option>
+        <option value="claude-haiku-5-5">Claude Haiku 5.5 (خیلی سریع)</option>
+      </select>
+      <label for="custom">دستور ثابت برای همه پروژه‌ها (اختیاری)</label>
+      <textarea id="custom" style="min-height:70px" placeholder="مثلاً: همیشه کامنت‌ها را به دری بنویس. رنگ اصلی سبز باشد."></textarea>
+    </details>
+
+    <label for="lang">نوع برنامه</label>
+    <select id="lang">
+      <option value="auto">خودکار</option>
+      <option value="یک فایل HTML کامل (HTML + CSS + JavaScript)">صفحه وب / HTML</option>
+      <option value="Python">Python</option>
+      <option value="JavaScript (Node.js)">Node.js</option>
+      <option value="C#">C#</option>
+      <option value="Java">Java</option>
+      <option value="C++">C++</option>
+    </select>
+
+    <label for="prompt">چه برنامه‌ای می‌خواهی؟</label>
+    <textarea id="prompt" placeholder="مثلاً: یک برنامه حساب‌کتاب دکان با ثبت فروش و خرید و گزارش روزانه"></textarea>
+    <div class="row" style="margin-top:8px"><button class="alt sm" id="btnImprove" type="button">بهتر کردن درخواست</button><span style="font-size:12px;color:var(--mut);align-self:center">Ctrl+Enter برای ساخت</span></div>
+    <div id="chips"></div>
+
+    <div class="row">
+      <button class="main" id="go">بساز</button>
+      <button class="alt" id="stop" hidden>توقف</button>
+      <button class="alt" id="reset" title="پروژه جدید">برنامه جدید</button>
+    </div>
+    <div id="status" role="status" aria-live="polite"></div>
+    <div id="usage"></div>
+
+    <div id="versionsBox" hidden>
+      <h2>نسخه‌ها</h2>
+      <ol id="versions"></ol>
+    </div>
+  </section>
+
+  <section id="workspace">
+    <div id="empty" class="empty">
+      <strong>هنوز برنامه‌ای نساخته‌ای</strong>
+      درخواستت را بنویس یا یکی از نمونه‌ها را انتخاب کن. بعد از ساخت، می‌توانی تغییر بخواهی؛ مثلاً «رنگ‌ها را آبی کن» یا «دکمه چاپ اضافه کن».
+    </div>
+    <div id="result" hidden>
+      <p id="note"></p>
+      <div class="tabs" role="tablist">
+        <button role="tab" id="tabView" aria-selected="true">پیش‌نمایش</button>
+        <button role="tab" id="tabCode" aria-selected="false">کد</button>
+        <button role="tab" id="tabErr" aria-selected="false">خطاها<span class="badge" id="errBadge" hidden>0</span></button>
+      </div>
+
+      <div id="paneView">
+        <div class="bar">
+          <span class="grow">اندازه صفحه:</span>
+          <span class="devs">
+            <button class="alt sm on" data-w="100%">رومیزی</button>
+            <button class="alt sm" data-w="768px">تبلت</button>
+            <button class="alt sm" data-w="390px">موبایل</button>
+          </span>
+          <button class="alt sm" id="btnRefresh">اجرای دوباره</button>
+          <button class="alt sm" id="btnFull">تمام‌صفحه</button>
+          <button class="alt sm" id="btnTab">باز کردن در تب جدید</button>
+        </div>
+        <div id="frameWrap"><iframe id="frame" title="پیش‌نمایش برنامه" sandbox="allow-scripts allow-forms allow-modals"></iframe></div>
+      </div>
+
+      <div id="paneCode" hidden>
+        <div class="bar">
+          <span class="grow" id="info"></span>
+          <button class="alt sm" id="btnDiff">مقایسه با نسخه قبل</button>
+          <button class="alt sm" id="btnEdit">ویرایش دستی</button>
+          <button class="sm" id="btnSaveEdit" hidden>ذخیره به‌عنوان نسخه جدید</button>
+          <button class="alt sm" id="btnCopy">کپی</button>
+          <button id="btnDown" class="sm">دانلود</button>
+        </div>
+        <div class="codewrap" id="codewrap"><pre id="ln" aria-hidden="true"></pre><pre id="src"></pre></div>
+        <textarea id="editor" hidden spellcheck="false" aria-label="ویرایش کد"></textarea>
+      </div>
+
+      <div id="paneErr" hidden>
+        <div class="bar">
+          <span class="grow" id="errInfo"></span>
+          <button class="sm" id="btnFix">رفع خودکار خطاها</button>
+        </div>
+        <ul id="errList"></ul>
+      </div>
+      <div class="row" id="contRow" hidden><button id="btnCont">ادامه ساخت کد</button></div>
+    </div>
+  </section>
+</main>
+
+<dialog id="dlg">
+  <h2 style="margin-top:0;font-size:18px">پروژه‌های ذخیره‌شده</h2>
+  <ul id="plist"></ul>
+  <div class="row">
+    <button class="alt" id="btnExport">ذخیره پروژه فعلی در فایل</button>
+    <button class="alt" id="btnImport">وارد کردن پروژه از فایل</button>
+    <input type="file" id="impFile" accept=".json,application/json" hidden>
+    <button class="alt" id="dlgClose" style="margin-inline-start:auto">بستن</button>
+  </div>
+</dialog>
+
+<script>
+const $ = id => document.getElementById(id);
+const BASE_SYSTEM = "You are an expert software engineer. The user describes a program in words; you write the complete, working code. Reply in the user's language, starting with 2-4 short sentences explaining what you built and how to run it. Then give ALL the code in ONE single fenced code block with the language tag (for web apps, one self-contained HTML file with inline CSS and JS). Build polished, professional results: clean layout, responsive on phones, accessible, validated inputs, sensible error handling, and saved data where useful. If the user writes Persian/Dari, make web pages right-to-left. Never leave placeholders or partial code. When the user asks for a change, return the full updated code again.";
+const CONT_MSG = "Your last reply was cut off. Continue the code from the exact character where it stopped, without repeating anything. Output only the remaining code inside one fenced code block, with no explanation.";
+const EXT = { html:"html", python:"py", py:"py", javascript:"js", js:"js", csharp:"cs", cs:"cs", java:"java", cpp:"cpp", c:"c", bash:"sh", sh:"sh", css:"css", json:"json" };
+const STARTERS = [
+  ["حساب‌کتاب دکان", "یک برنامه حساب‌کتاب دکان با ثبت فروش و خرید، موجودی جنس و گزارش روزانه"],
+  ["محاسبه قرض و قسط", "یک برنامه برای ثبت قرض‌ها و قسط‌ها با یادآوری تاریخ پرداخت و مجموع باقی‌مانده"],
+  ["لیست کارها", "یک لیست کارهای روزانه با دسته‌بندی، اولویت و جستجو"],
+  ["بازی حافظه", "یک بازی حافظه با کارت‌های تصویری، شمارنده حرکت و بهترین امتیاز"]
+];
+const FOLLOWUPS = [
+  ["ظاهر را حرفه‌ای‌تر کن", "ظاهر برنامه را حرفه‌ای‌تر و مرتب‌تر کن."],
+  ["ریسپانسیو کن", "برنامه روی موبایل هم کاملاً درست نمایش داده شود."],
+  ["حالت تاریک", "حالت تاریک با دکمه تغییر تم اضافه کن."],
+  ["دکمه چاپ", "دکمه چاپ گزارش اضافه کن."],
+  ["ذخیره داده‌ها", "داده‌ها در مرورگر ذخیره شوند تا با بستن صفحه از بین نروند."]
+];
+
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
+};
+function newProject() { return { id: Date.now().toString(36), title: "", history: [], versions: [], updated: Date.now() }; }
+
+let project = newProject(), viewIndex = -1, errors = [], busy = false, ctl = null, raf = 0;
+
+/* ---------- theme & settings ---------- */
+function applyTheme(t) { document.documentElement.dataset.theme = t; $("btnTheme").textContent = t === "dark" ? "تم روشن" : "تم تیره"; store.set("ab_theme", t); }
+applyTheme(store.get("ab_theme", matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+$("btnTheme").onclick = () => applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+
+$("key").value = store.get("ab_key", "");
+$("model").value = store.get("ab_model", "claude-sonnet-5-5") || "claude-sonnet-5-5";
+$("custom").value = store.get("ab_custom", "");
+$("lang").selectedIndex = Math.max(0, +store.get("ab_lang", 0));
+$("settings").open = !$("key").value;
+$("model").onchange = () => store.set("ab_model", $("model").value);
+$("custom").onchange = () => store.set("ab_custom", $("custom").value);
+$("lang").onchange = () => store.set("ab_lang", $("lang").selectedIndex);
+$("showKey").onclick = () => { const k = $("key"), s = k.type === "password"; k.type = s ? "text" : "password"; $("showKey").textContent = s ? "پنهان" : "نمایش"; };
+
+function setStatus(t, err, busyDots) { const s = $("status"); s.textContent = t; s.className = (err ? "err " : "") + (busyDots ? "dots" : ""); }
+
+/* ---------- helpers ---------- */
+function parse(text) {
+  const m = text.match(/```([\w+#-]*)\n([\s\S]*?)(```|$)/);
+  if (!m) return { note: text.trim(), code: "", lang: "" };
+  return { note: text.slice(0, m.index).trim(), code: m[2].replace(/\n$/, ""), lang: (m[1] || "").toLowerCase() };
+}
+const isHtml = v => !!v && !!v.code && (v.lang === "html" || v.lang === "htm" || (!v.lang && /^\s*(<!doctype html|<html)/i.test(v.code)));
+const curVersion = () => project.versions[viewIndex];
+
+const CATCHER = '<script>(function(){function s(m){parent.postMessage({__ab:1,msg:String(m)},"*")}window.addEventListener("error",function(e){s((e.message||"error")+(e.lineno?" (خط "+e.lineno+")":""))});window.addEventListener("unhandledrejection",function(e){s("Promise: "+(e.reason&&e.reason.message||e.reason))});var ce=console.error;console.error=function(){s([].join.call(arguments," "));ce.apply(console,arguments)}})();<\/script>';
+function previewDoc(code) { return /<head[^>]*>/i.test(code) ? code.replace(/<head[^>]*>/i, m => m + CATCHER) : CATCHER + code; }
+
+/* ---------- tabs ---------- */
+function switchTab(n) {
+  [["view", "tabView", "paneView"], ["code", "tabCode", "paneCode"], ["err", "tabErr", "paneErr"]].forEach(([k, t, p]) => {
+    $(t).setAttribute("aria-selected", k === n); $(p).hidden = k !== n;
+  });
+}
+$("tabView").onclick = () => switchTab("view");
+$("tabCode").onclick = () => switchTab("code");
+$("tabErr").onclick = () => switchTab("err");
+
+/* ---------- code view ---------- */
+function renderCode(code, plain) {
+  const cv = curVersion();
+  if (plain || code.length > 200000) $("src").textContent = code;
+  else $("src").innerHTML = highlight(code, cv ? (cv.lang || (isHtml(cv) ? "html" : "")) : "");
+  const n = code ? code.split("\n").length : 0;
+  let g = ""; for (let i = 1; i <= n; i++) g += i + "\n";
+  $("ln").textContent = g;
+}
+
+/* ---------- preview & errors ---------- */
+function runPreview() { const v = curVersion(); if (!isHtml(v)) return; errors = []; renderErrors(); $("frame").srcdoc = previewDoc(v.code); }
+window.addEventListener("message", e => {
+  if (!e.data || !e.data.__ab || e.source !== $("frame").contentWindow) return;
+  const m = e.data.msg.slice(0, 400);
+  if (errors.includes(m) || errors.length >= 20) return;
+  errors.push(m); renderErrors();
+});
+function renderErrors() {
+  const n = errors.length;
+  $("errBadge").hidden = !n; $("errBadge").textContent = n;
+  $("errInfo").textContent = n ? n + " خطا هنگام اجرا پیدا شد." : "تا الان خطایی گزارش نشده است.";
+  $("btnFix").disabled = !n;
+  const ul = $("errList"); ul.innerHTML = "";
+  errors.forEach(m => { const li = document.createElement("li"); li.textContent = m; ul.appendChild(li); });
+}
+document.querySelectorAll(".devs button").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".devs button").forEach(x => x.classList.toggle("on", x === b));
+  $("frameWrap").style.maxWidth = b.dataset.w;
+});
+$("btnRefresh").onclick = runPreview;
+$("btnFull").onclick = () => { const w = $("frameWrap"); if (w.requestFullscreen) w.requestFullscreen(); };
+$("btnTab").onclick = () => { const v = curVersion(); if (isHtml(v)) window.open(URL.createObjectURL(new Blob([v.code], { type: "text/html;charset=utf-8" })), "_blank"); };
+$("btnFix").onclick = () => generate({ text: "برنامه هنگام اجرا این خطاها را داد؛ آن‌ها را رفع کن و کد کامل را بده:\n- " + errors.join("\n- ") });
+
+/* ---------- copy / download ---------- */
+$("btnCopy").onclick = async e => {
+  try { await navigator.clipboard.writeText(curVersion().code); e.target.textContent = "کپی شد"; setTimeout(() => e.target.textContent = "کپی", 1500); }
+  catch (x) { setStatus("کپی انجام نشد.", true); }
+};
+$("btnDown").onclick = () => {
+  const v = curVersion(); if (!v) return;
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([v.code], { type: "text/plain;charset=utf-8" }));
+  a.download = "program." + (EXT[v.lang] || (isHtml(v) ? "html" : "txt")); a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+
+/* ---------- show a version ---------- */
+function showVersion(i) {
+  viewIndex = i; const v = project.versions[i];
+  $("empty").hidden = true; $("result").hidden = false;
+  $("note").textContent = v.note;
+  renderCode(v.code);
+  const h = isHtml(v);
+  $("info").textContent = (v.lang || "code") + " · " + v.code.split("\n").length + " خط";
+  $("tabView").hidden = !h; $("tabErr").hidden = !h;
+  document.querySelectorAll("#paneView .bar button").forEach(b => b.disabled = false);
+  $("contRow").hidden = !v.truncated || i !== project.versions.length - 1;
+  setDiff(false); setEdit(false);
+  errors = []; renderErrors();
+  if (h) { runPreview(); switchTab("view"); } else switchTab("code");
+  $("usage").textContent = v.usage ? "توکن ورودی: " + v.usage.in + " · توکن خروجی: " + v.usage.out : "";
+  renderVersions(); renderChips();
+}
+function renderVersions() {
+  const ol = $("versions"); ol.innerHTML = "";
+  $("versionsBox").hidden = project.versions.length === 0;
+  project.versions.forEach((v, i) => {
+    const li = document.createElement("li"); if (i === viewIndex) li.className = "cur";
+    const b = document.createElement("button"); b.className = "v"; b.textContent = (i + 1) + ". " + v.prompt.replace(/\s+/g, " ").slice(0, 60); b.onclick = () => showVersion(i);
+    li.appendChild(b);
+    if (i < project.versions.length - 1) {
+      const r = document.createElement("button"); r.className = "alt sm"; r.textContent = "ادامه از اینجا"; r.title = "نسخه‌های بعد از این حذف می‌شوند";
+      r.onclick = () => {
+        if (!confirm("نسخه‌های بعد از نسخه " + (i + 1) + " حذف شوند و کار از همین نسخه ادامه پیدا کند؟")) return;
+        project.history = project.history.slice(0, 2 * (i + 1)); project.versions = project.versions.slice(0, i + 1);
+        save(); showVersion(i); setStatus("به نسخه " + (i + 1) + " برگشتی.");
+      };
+      li.appendChild(r);
+    }
+    ol.appendChild(li);
+  });
+}
+function renderChips() {
+  const box = $("chips"); box.innerHTML = "";
+  (project.versions.length ? FOLLOWUPS : STARTERS).forEach(([label, text]) => {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = label;
+    b.onclick = () => { $("prompt").value = text; $("prompt").focus(); }; box.appendChild(b);
+  });
+}
+
+/* ---------- projects ---------- */
+const loadAll = () => { try { return JSON.parse(store.get("ab_projects", "[]")) || []; } catch (e) { return []; } };
+function save() {
+  if (!project.versions.length) return;
+  project.updated = Date.now();
+  const all = loadAll().filter(p => p.id !== project.id); all.unshift(project);
+  if (!store.set("ab_projects", JSON.stringify(all.slice(0, 30)))) setStatus("حافظه مرورگر پر است؛ پروژه ذخیره نشد. چند پروژه قدیمی را پاک کن.", true);
+}
+function openProject(p) {
+  project = p; $("dlg").close();
+  if (p.versions.length) showVersion(p.versions.length - 1); else resetView();
+  $("prompt").placeholder = "تغییر بعدی را بنویس..."; $("go").textContent = "اعمال تغییر"; setStatus("پروژه باز شد.");
+}
+function renderProjects() {
+  const ul = $("plist"); ul.innerHTML = ""; const all = loadAll();
+  if (!all.length) { const li = document.createElement("li"); li.textContent = "هنوز پروژه‌ای ذخیره نشده است."; ul.appendChild(li); return; }
+  all.forEach(p => {
+    const li = document.createElement("li");
+    const t = document.createElement("div"); t.className = "t";
+    const b = document.createElement("b"); b.textContent = p.title || "بدون عنوان";
+    const s = document.createElement("small"); s.textContent = p.versions.length + " نسخه · " + new Date(p.updated).toLocaleString("fa");
+    t.append(b, s);
+    const o = document.createElement("button"); o.className = "sm"; o.textContent = "باز کردن"; o.onclick = () => openProject(p);
+    const d = document.createElement("button"); d.className = "alt sm"; d.textContent = "حذف";
+    d.onclick = () => { if (!confirm("این پروژه حذف شود؟")) return; store.set("ab_projects", JSON.stringify(loadAll().filter(x => x.id !== p.id))); if (p.id === project.id) newOne(); renderProjects(); };
+    li.append(t, o, d); ul.appendChild(li);
+  });
+}
+$("btnProjects").onclick = () => { renderProjects(); $("dlg").showModal(); };
+$("dlgClose").onclick = () => $("dlg").close();
+
+function resetView() {
+  viewIndex = -1; errors = []; $("result").hidden = true; $("empty").hidden = false; $("frame").srcdoc = "";
+  $("versionsBox").hidden = true; $("usage").textContent = ""; renderChips();
+}
+function newOne() {
+  if (busy && ctl) ctl.abort();
+  project = newProject(); resetView();
+  $("prompt").value = ""; $("prompt").placeholder = "چه برنامه‌ای می‌خواهی؟"; $("go").textContent = "بساز"; setStatus("");
+}
+$("reset").onclick = newOne;
+
+/* ---------- API (streaming) ---------- */
+async function callApi(key, msgs, signal, onText, opts = {}) {
+  const system = opts.system || BASE_SYSTEM + ($("custom").value.trim() ? "\n\nStanding instructions from the user (always follow):\n" + $("custom").value.trim() : "");
+  const r = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST", signal,
+    headers: { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
+    body: JSON.stringify({ model: $("model").value, max_tokens: opts.max || 16000, stream: true, system, messages: msgs })
+  });
+  if (!r.ok) { let m = "خطا " + r.status; try { const d = await r.json(); m = (d.error && d.error.message) || m; } catch (e) {} throw new Error(m); }
+  const rd = r.body.getReader(), dec = new TextDecoder();
+  let buf = "", text = "", stop = "", u = { in: 0, out: 0 };
+  for (;;) {
+    const { done, value } = await rd.read(); if (done) break;
+    buf += dec.decode(value, { stream: true });
+    const parts = buf.split("\n\n"); buf = parts.pop();
+    for (const p of parts) {
+      const line = p.split("\n").find(l => l.startsWith("data:")); if (!line) continue;
+      let ev; try { ev = JSON.parse(line.slice(5)); } catch (e) { continue; }
+      if (ev.type === "content_block_delta" && ev.delta && ev.delta.type === "text_delta") { text += ev.delta.text; onText(text); }
+      else if (ev.type === "message_start" && ev.message && ev.message.usage) u.in = ev.message.usage.input_tokens || 0;
+      else if (ev.type === "message_delta") { if (ev.delta && ev.delta.stop_reason) stop = ev.delta.stop_reason; if (ev.usage && ev.usage.output_tokens != null) u.out = ev.usage.output_tokens; }
+      else if (ev.type === "error") throw new Error((ev.error && ev.error.message) || "خطای ناشناخته");
+    }
+  }
+  return { text, stop, u };
+}
+
+function setBusy(b) { busy = b; $("go").disabled = b; $("stop").hidden = !b; $("btnCont").disabled = b; $("btnFix").disabled = b || !errors.length; }
+
+async function generate(opts = {}) {
+  if (busy) return;
+  const key = $("key").value.trim(), cont = !!opts.cont;
+  const text = cont ? "" : (opts.text || $("prompt").value).trim();
+  if (!key) { $("settings").open = true; return setStatus("اول کلید API را وارد کن.", true); }
+  if (!cont && !text) return setStatus("بنویس چه برنامه‌ای می‌خواهی.", true);
+  store.set("ab_key", key);
+  const lang = $("lang").value;
+  let content = cont ? CONT_MSG : text;
+  if (!cont && project.history.length === 0 && lang !== "auto") content += "\n\n(نوع برنامه: " + lang + ")";
+  const msgs = project.history.concat([{ role: "user", content }]);
+  const last = project.versions[project.versions.length - 1];
+  setBusy(true); ctl = new AbortController(); setStatus("در حال ساخت", false, true);
+  $("empty").hidden = true; $("result").hidden = false; $("contRow").hidden = true; $("tabView").hidden = true; $("tabErr").hidden = true; switchTab("code");
+  try {
+    const res = await callApi(key, msgs, ctl.signal, t => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0; const p = parse(t);
+        $("note").textContent = cont && last ? last.note : p.note;
+        renderCode(cont && last ? last.code + p.code : p.code, true);
+      });
+    });
+    cancelAnimationFrame(raf); raf = 0;
+    const p = parse(res.text);
+    if (cont && last) {
+      last.code += p.code; last.truncated = res.stop === "max_tokens";
+      last.usage = { in: last.usage ? last.usage.in : 0, out: (last.usage ? last.usage.out : 0) + res.u.out };
+      const rebuilt = (last.note ? last.note + "\n\n" : "") + "```" + last.lang + "\n" + last.code + "\n```";
+      project.history = project.history.slice(0, -1).concat([{ role: "assistant", content: rebuilt }]);
+    } else {
+      project.history = msgs.concat([{ role: "assistant", content: res.text }]);
+      project.versions.push({ prompt: text, note: p.note, code: p.code, lang: p.lang, ts: Date.now(), usage: res.u, truncated: res.stop === "max_tokens" });
+      if (!project.title) project.title = text.slice(0, 50);
+      $("prompt").value = ""; $("prompt").placeholder = "تغییر بعدی را بنویس..."; $("go").textContent = "اعمال تغییر";
+    }
+    save(); showVersion(project.versions.length - 1);
+    const v = curVersion();
+    setStatus(v.truncated ? "کد خیلی طولانی بود و ناقص ماند؛ دکمه «ادامه ساخت کد» را بزن." : "آماده شد.");
+  } catch (e) {
+    cancelAnimationFrame(raf); raf = 0;
+    if (project.versions.length) showVersion(viewIndex < 0 ? project.versions.length - 1 : viewIndex); else resetView();
+    setStatus(e.name === "AbortError" ? "ساخت متوقف شد." : "خطا: " + e.message, e.name !== "AbortError");
+  }
+  setBusy(false); ctl = null;
+}
+
+$("go").onclick = () => generate();
+$("stop").onclick = () => ctl && ctl.abort();
+$("btnCont").onclick = () => generate({ cont: true });
+$("prompt").addEventListener("keydown", e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) generate(); });
+
+/* ---------- syntax highlight ---------- */
+const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const KW = new Set("function const let var return if else for while do class new import from export default async await try catch finally throw switch case break continue def self None True False in not and or is lambda public private protected static void int string bool using namespace this null true false undefined typeof include package extends implements interface struct enum with as pass yield elif except raise print".split(" "));
+const RE_A = /(<!--[\s\S]*?-->|\/\*[\s\S]*?\*\/|\/\/[^\n]*)|("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|`(?:\\.|[^`\\])*`)|(<\/?[a-zA-Z][\w-]*|\/?>)|(\b\d+(?:\.\d+)?\b)|([A-Za-z_]\w*)/g;
+const RE_B = /(<!--[\s\S]*?-->|\/\*[\s\S]*?\*\/|\/\/[^\n]*|#[^\n]*)|("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|`(?:\\.|[^`\\])*`)|(<\/?[a-zA-Z][\w-]*|\/?>)|(\b\d+(?:\.\d+)?\b)|([A-Za-z_]\w*)/g;
+function highlight(code, lang) {
+  const re = /^(python|py|bash|sh)$/.test(lang) ? RE_B : RE_A; re.lastIndex = 0;
+  let out = "", i = 0, m;
+  while ((m = re.exec(code))) {
+    out += esc(code.slice(i, m.index)); i = m.index + m[0].length;
+    const cls = m[1] ? "hc" : m[2] ? "hs" : m[3] ? "ht" : m[4] ? "hn" : (KW.has(m[5]) ? "hk" : "");
+    out += cls ? '<span class="' + cls + '">' + esc(m[0]) + "</span>" : esc(m[0]);
+  }
+  return out + esc(code.slice(i));
+}
+
+/* ---------- compare with previous version ---------- */
+let diffMode = false, editMode = false;
+function diffHtml(a, b) {
+  const A = a.split("\n"), B = b.split("\n"), n = A.length, m = B.length;
+  if (n * m > 4e6) return esc("نسخه‌ها برای مقایسه خیلی بزرگ‌اند.");
+  const L = Array.from({ length: n + 1 }, () => new Uint16Array(m + 1));
+  for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) L[i][j] = A[i] === B[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+  const row = (c, p, t) => '<span class="' + c + '">' + p + esc(t || " ") + "</span>";
+  let i = 0, j = 0, out = "";
+  while (i < n && j < m) {
+    if (A[i] === B[j]) { out += row("dsame", "  ", A[i]); i++; j++; }
+    else if (L[i + 1][j] >= L[i][j + 1]) { out += row("ddel", "- ", A[i]); i++; }
+    else { out += row("dadd", "+ ", B[j]); j++; }
+  }
+  while (i < n) out += row("ddel", "- ", A[i++]);
+  while (j < m) out += row("dadd", "+ ", B[j++]);
+  return out;
+}
+function setDiff(on) {
+  const v = curVersion(), prev = project.versions[viewIndex - 1];
+  diffMode = on && !!prev;
+  $("btnDiff").disabled = !prev; $("btnDiff").textContent = diffMode ? "نمایش کد" : "مقایسه با نسخه قبل";
+  $("ln").hidden = diffMode;
+  if (!v) return;
+  if (diffMode) $("src").innerHTML = diffHtml(prev.code, v.code); else renderCode(v.code);
+}
+$("btnDiff").onclick = () => { if (editMode) setEdit(false); setDiff(!diffMode); };
+
+/* ---------- manual edit ---------- */
+function setEdit(on) {
+  editMode = on; const v = curVersion();
+  $("editor").hidden = !on; $("codewrap").hidden = on; $("btnSaveEdit").hidden = !on;
+  $("btnEdit").textContent = on ? "لغو ویرایش" : "ویرایش دستی";
+  if (on && v) $("editor").value = v.code;
+}
+$("btnEdit").onclick = () => { if (diffMode) setDiff(false); setEdit(!editMode); };
+$("btnSaveEdit").onclick = () => {
+  const v = curVersion(), code = $("editor").value;
+  if (busy || !v) return;
+  if (code === v.code) return setEdit(false);
+  if (viewIndex < project.versions.length - 1 && !confirm("نسخه‌های بعد از این حذف می‌شوند. ادامه بدهم؟")) return;
+  project.history = project.history.slice(0, 2 * (viewIndex + 1));
+  project.versions = project.versions.slice(0, viewIndex + 1);
+  project.versions.push({ prompt: "ویرایش دستی", note: v.note, code, lang: v.lang, ts: Date.now(), usage: null });
+  project.history.push(
+    { role: "user", content: "I edited the code by hand. From now on, use this exact code as the base for any changes." },
+    { role: "assistant", content: (v.note ? v.note + "\n\n" : "") + "```" + v.lang + "\n" + code + "\n```" }
+  );
+  save(); showVersion(project.versions.length - 1); setStatus("به‌عنوان نسخه جدید ذخیره شد.");
+};
+
+/* ---------- export / import project ---------- */
+$("btnExport").onclick = () => {
+  if (!project.versions.length) return alert("پروژه خالی است.");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(project)], { type: "application/json" }));
+  a.download = "project-" + project.id + ".json"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+$("btnImport").onclick = () => $("impFile").click();
+$("impFile").onchange = async e => {
+  const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+  try {
+    const p = JSON.parse(await f.text());
+    const ok = p && Array.isArray(p.versions) && Array.isArray(p.history) &&
+      p.versions.every(v => v && typeof v.code === "string") && p.history.every(h => h && typeof h.content === "string");
+    if (!ok || p.history.length !== 2 * p.versions.length) throw new Error("bad");
+    p.versions.forEach(v => { v.prompt = String(v.prompt || ""); v.note = String(v.note || ""); v.lang = String(v.lang || ""); });
+    p.id = Date.now().toString(36); p.title = String(p.title || ""); p.updated = Date.now();
+    project = p; save(); $("dlg").close();
+    if (p.versions.length) showVersion(p.versions.length - 1); else resetView();
+    $("prompt").placeholder = "تغییر بعدی را بنویس..."; $("go").textContent = "اعمال تغییر"; setStatus("پروژه وارد شد.");
+  } catch (x) { alert("فایل پروژه معتبر نیست."); }
+};
+
+/* ---------- improve the request ---------- */
+$("btnImprove").onclick = async () => {
+  if (busy) return;
+  const key = $("key").value.trim(), t = $("prompt").value.trim();
+  if (!key) { $("settings").open = true; return setStatus("اول کلید API را وارد کن.", true); }
+  if (!t) return setStatus("اول چند کلمه درباره برنامه بنویس.", true);
+  setBusy(true); ctl = new AbortController(); setStatus("در حال بهتر کردن درخواست", false, true);
+  try {
+    const r = await callApi(key, [{ role: "user", content: t }], ctl.signal, () => {}, {
+      system: "Rewrite the user's app request as a clear, detailed specification: main features, screens, data to store, and edge cases. Keep the user's language and keep it under 200 words. Output only the rewritten request.",
+      max: 1000
+    });
+    $("prompt").value = r.text.trim(); setStatus("درخواست بهتر شد؛ بخوان و اگر خوب بود «بساز» را بزن.");
+  } catch (e) { setStatus(e.name === "AbortError" ? "متوقف شد." : "خطا: " + e.message, e.name !== "AbortError"); }
+  setBusy(false); ctl = null;
+};
+
+renderChips(); renderErrors();
+</script>
+</body>
+</html>
